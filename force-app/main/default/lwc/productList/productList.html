@@ -1,0 +1,118 @@
+<template>    
+    <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+        <div class="slds-col slds-medium-size_3-of-12">
+            <!-- Search Filter Card -->
+            <lightning-card >
+                <div onkeyup={searchProduct} style="width: 90%; margin: auto">
+                    <lightning-input type="search" name="enter-search" placeholder="item"
+                        label="Press 'Enter' to search..." value={searchKey}>
+                    </lightning-input>
+                </div>
+            </lightning-card>
+        </div>
+        <!-- Search Filter END -->
+    
+        <!-- Orders Details Card -->
+        <div class="slds-col slds-medium-size_9-of-12">
+            <lightning-card>
+                <div class="filter slds-grid slds-wrap slds-gutters" style="width: 80%; margin: auto">                  
+                    <lightning-input type="text" label="Order Number" class="slds-col slds-medium-size_4-of-12"
+                        disabled="true" value={orderNumber}>
+                    </lightning-input>
+                    <lightning-input type="date" name="orderDate" label="Order Date"
+                        class="slds-col slds-medium-size_4-of-12" onchange={getSelectedDate}>
+                    </lightning-input>
+    
+                    <lightning-record-edit-form object-api-name="Order__c" onchange={selectAccountValue}
+                        style="padding-top: 4px">
+                        <label for="fieldid">Account</label>
+                        <lightning-input-field id="fieldid" required={required} variant="label-hidden"
+                            field-name="Account__c" disabled={disabled}>
+                        </lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+            </lightning-card>
+        </div>
+    </div>
+<!-- Orders Details Card END -->
+
+  <lightning-card>
+      <div class="slds-table--header-fixed_container">
+          <table class="slds-table slds-table_bordered slds-table--header-fixed">
+              <thead>
+                  <tr>
+                      <th></th>
+                      <th>Product Name</th>
+                      <th>Description</th>
+                      <th>Price</th>
+                      <th>Unit</th>
+                      <th>Category</th>
+                      <th>Quantity</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <template if:true={products.data}>
+                      <template for:each={products.data} for:item="product">
+                          <tr key={product.Id}>
+                              <td style="width: min-content;"><img style="min-width: 130px; width: 10%;"
+                                      src={product.Image_URL__c} /></td>
+                              <td>{product.Name}</td>
+                              <td>{product.Description__c}</td>
+                              <td>${product.Gross_Amount__c}</td>
+                              <td>{product.Unit__c}</td>
+                              <td>{product.Category__c}</td>
+                              <td>
+                                  <lightning-button-group>
+                                      <lightning-button onclick={minusQuantity} value={index} label="-"
+                                          data-id={product.Id}></lightning-button>
+                                      <lightning-button label={product.Quantity__c}></lightning-button>
+                                      <lightning-button onclick={addQuantity} value={index} label="+"
+                                          data-id={product.Id}></lightning-button>
+                                  </lightning-button-group>
+                              </td>
+                              <td>
+                                  <lightning-button data-id={product.Id} data-quantity={product.Quantity__c} onclick={addToCart} label="Add to Cart">
+                                  </lightning-button>
+                              </td>
+                          </tr>
+                      </template>
+                  </template>
+              </tbody>                 
+          </table>
+      </div>
+  </lightning-card>
+  
+  <!-- view cart button -->
+  <lightning-card if:true={viewCart}>                         
+        <div class="slds-clearfix">
+            <lightning-button-group class="slds-align_absolute-center">
+                <lightning-button variant="success" label="View Cart" class="slds-align_absolute-center"
+                    onclick={viewCartDisplay}>
+                </lightning-button>
+            </lightning-button-group>
+        </div>
+  </lightning-card>
+
+  <!-- view cart section -->
+  <lightning-card>
+      <template if:true={viewCartFound}>
+        <div style="margin-top: 2%;">
+            <section role="dialog" tabindex="0" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-card title="View Cart Details" icon-name="standard:people">
+                            <lightning-button-icon
+                                class="slds-modal__close" icon-name="utility:close" 
+                                onclick={closeViewCartDetail}>
+                            </lightning-button-icon>
+                        </lightning-card>
+                    </header>
+                    <div class="slds-modal__content slds-p-around__medium">                                               
+                        <c-product-view-cart cart-bucket-list={cartBucketList} cart-bucket-found={cartBucketFound}></c-product-view-cart>
+                    </div>
+                </div>
+            </section>
+        </div>    
+    </template>
+  </lightning-card>
+</template>

@@ -1,0 +1,101 @@
+<template>
+    <template if:false={cartBucketFound}>
+        <div class="slds-align_absolute-center" style="color:red">
+            You Cart is empty please purchase item!..
+        </div>
+    </template>    
+        <div class="slds-p-around_medium">                
+            <lightning-layout multiple-rows style="background-color:azure">                
+            <template if:true={cartBucketFound} for:each={cartBucketList} for:item="cart">  
+                <div key={cart.Id}>
+                    <lightning-button value="test button" onclick={getBucketList}></lightning-button>
+                </div>  
+                <div key={cart.Id} class="slds-box slds-grid slds-wrap slds-p-around_small" style="margin-top: 2%;width:100%;">
+                    <div class="slds-col">
+                         <lightning-card>
+                            <div class="slds-m-around_medium">
+                                <img style="min-width: 80px; width: 5%;" src={cart.Image_URL__c}>
+                            </div>
+                        </lightning-card>
+                    </div>
+                   
+                    <div class="slds-col">
+                        <div class="slds-col slds-border_bottom">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item padding="around-small">
+                                    <lightning-layout-item key={cart.Id} padding="around-small">
+                                        <p class="field-title" title="Product">Product</p>
+                                        <p>{cart.Name}</p>
+                                    </lightning-layout-item>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small">
+                                    <lightning-layout-item key={cart.Id} padding="around-small">
+                                        <p class="field-title" title="Product">Order</p>
+                                        <p>{cart.Product__c}</p>
+                                    </lightning-layout-item>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small">
+                                    <lightning-layout-item key={cart.Id} padding="around-small">
+                                        <p class="field-title" title="Product">Product Price</p>
+                                        <p>${cart.Price__c}.00</p>
+                                    </lightning-layout-item>
+                                </lightning-layout-item>    
+                                <lightning-layout-item padding="around-small">
+                                    <lightning-layout-item key={cart.Id} padding="around-small">
+                                        <p class="field-title" title="Product">Discount</p>
+                                        <p>${cart.Discount__c}%</p>
+                                    </lightning-layout-item>
+                                </lightning-layout-item>    
+                                <lightning-layout-item padding="around-small">
+                                    <lightning-layout-item key={cart.Id} padding="around-small">
+                                        <p class="field-title" title="Product">Product Total</p>
+                                        <p>${cart.Total__c}.00</p>
+                                    </lightning-layout-item>
+                                </lightning-layout-item>                                
+                                <lightning-layout-item padding="around-small">
+                                    <lightning-layout-item key={cart.Id} padding="around-small">
+                                        <p class="field-title" title="Product">Quantity</p>                                        
+                                        <p><lightning-input type="text" class="slds-col slds-medium-size_2-of-4"
+                                                value={cart.Qty__c} onchange={getQuantity}>
+                                            </lightning-input>
+                                        </p>                                        
+                                    </lightning-layout-item>
+                                </lightning-layout-item>  
+                                <lightning-layout-item padding="around-small">
+                                    <lightning-layout-item key={cart.Id} padding="around-small">
+                                        <p>
+                                            <lightning-button variant="success" data-id={cart.Id} onclick={updateCart} label="Update Cart">
+                                            </lightning-button>
+                                        </p>
+                                    </lightning-layout-item>
+                                </lightning-layout-item>   
+                                <lightning-layout-item padding="around-small">
+                                    <lightning-layout-item key={cart.Id} padding="around-small">
+                                        <p>
+                                            <lightning-button variant="destructive" data-id={cart.Id} onclick={deleteOrder} label="Remove">
+                                            </lightning-button>
+                                        </p>
+                                    </lightning-layout-item>
+                                </lightning-layout-item>                  
+                            </lightning-layout>
+                        </div> 
+                    </div>
+                </div>   
+                </template>             
+                <div class="slds-col">
+                    <div class="slds-col slds-border_bottom">
+                        <lightning-layout-item padding="around-small">                                                      
+                            <lightning-layout-item style="text-align:center" padding="around-small">
+                                <h1 class="field-overall" title="Product">Gross</h1>
+                                <p>${grossTotal}.00</p>
+                            </lightning-layout-item> 
+                            <lightning-layout-item  style="text-align:center" padding="around-small">
+                                <h1 class="field-overall" title="Product">Net</h1>
+                                <p>${netTotal}.00</p>
+                            </lightning-layout-item>    
+                        </lightning-layout-item>
+                    </div>
+                </div>
+            </lightning-layout>                
+        </div>  
+</template>
